@@ -1,6 +1,7 @@
 package com.example.ecommercebackend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,6 +30,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -20,7 +20,6 @@ public class CartController {
             @RequestParam Long productId,
             @RequestParam Integer quantity
     ) {
-
         return cartService.addToCart(
                 userId,
                 productId,
@@ -29,17 +28,14 @@ public class CartController {
     }
 
     @GetMapping("/{userId}")
-    public Cart getCart(
-            @PathVariable Long userId
-    ) {
-
+    public Cart getCart(@PathVariable Long userId)
+    {
         return cartService.getCart(userId);
     }
 
     @DeleteMapping("/{userId}")
-    public String clearCart(
-            @PathVariable Long userId
-    ) {
+    public String clearCart(@PathVariable Long userId)
+    {
 
         cartService.clearCart(userId);
 

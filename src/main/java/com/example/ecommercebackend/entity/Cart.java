@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "carts")
 @Getter
@@ -28,5 +28,6 @@ public class Cart {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonIgnore
     private List<CartItem> items = new ArrayList<>();
 }

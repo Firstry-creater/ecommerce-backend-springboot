@@ -1,8 +1,10 @@
 
 package com.example.ecommercebackend.controller;
 
-import com.example.ecommercebackend.entity.Product;
+import com.example.ecommercebackend.dto.response.ProductResponse;
+import com.example.ecommercebackend.dto.request.ProductRequest;
 import com.example.ecommercebackend.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,30 +19,30 @@ public class ProductController {
 
     // Create Product
     @PostMapping("/{categoryId}")
-    public Product createProduct(
-            @RequestBody Product product,
+    public ProductResponse createProduct(
+           @Valid @RequestBody ProductRequest request,
             @PathVariable Long categoryId) {
 
-        return productService.createProduct(product, categoryId);
+        return productService.createProduct(request, categoryId);
     }
 
     // Get All Products
     @GetMapping
-    public List<Product> getAllProducts() {
+    public List<ProductResponse> getAllProducts() {
 
         return productService.getAllProducts();
     }
 
     // Get Product By id
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
+    public ProductResponse getProductById(@PathVariable Long id) {
 
         return productService.getProductById(id);
     }
 
     // Get Products By Category
     @GetMapping("/category/{categoryId}")
-    public List<Product> getProductsByCategory(
+    public List<ProductResponse> getProductsByCategory(
             @PathVariable Long categoryId) {
 
         return productService.getProductsByCategory(categoryId);

@@ -2,6 +2,8 @@
 
 package com.example.ecommercebackend.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,6 +31,7 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @OneToMany(
@@ -36,5 +39,6 @@ public class Order {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonIgnore
     private List<OrderItem> orderItems = new ArrayList<>();
 }

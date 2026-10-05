@@ -1,7 +1,11 @@
+
 package com.example.ecommercebackend.service;
 
+import com.example.ecommercebackend.dto.request.ProductRequest;
+import com.example.ecommercebackend.dto.response.ProductResponse;
 import com.example.ecommercebackend.entity.Category;
 import com.example.ecommercebackend.entity.Product;
+import com.example.ecommercebackend.exception.ResourceNotFoundException;
 import com.example.ecommercebackend.repository.CategoryRepository;
 import com.example.ecommercebackend.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,44 +20,76 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    // Create Product
-    public Product createProduct(Product product, Long categoryId) {
+    public ProductResponse createProduct(ProductRequest request, Long categoryId) {
 
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() ->
-                        new RuntimeException("Category not found"));
+                        new ResourceNotFoundException("Category not found"));
 
+        Product product = new Product();
+
+        product.setName(request.getName());
+        product.setDescription(request.getDescription());
+        product.setPrice(request.getPrice());
+        product.setStock(request.getStock());
         product.setCategory(category);
 
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+
+        return mapToResponse(savedProduct);
     }
 
-    // Get All Products
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductResponse> getAllProducts() {
+
+        return productRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 
-    // Get Product By id
-    public Product getProductById(Long id) {
+    public ProductResponse getProductById(Long id) {
 
-        return productRepository.findById(id)
+        Product product = productRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Product not found"));
+                        new ResourceNotFoundException("Product not found"));
+
+        return mapToResponse(product);
     }
 
-    // Get Products By Category
-    public List<Product> getProductsByCategory(Long categoryId) {
+    public List<ProductResponse> getProductsByCategory(Long categoryId) {
 
-        return productRepository.findByCategoryId(categoryId);
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new ResourceNotFoundException("Category not found");
+        }
+
+        return productRepository.findByCategoryId(categoryId)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 
-    // Delete Product
     public void deleteProduct(Long id) {
 
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product not found"));
+
+        productRepository.delete(product);
     }
 
+    private ProductResponse mapToResponse(Product product) {
 
+        return ProductResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .stock(product.getStock())
+                .categoryId(
+                        product.getCategory() != null
+                                ? product.getCategory().getId()
+                                : null
+                )
+                .build();
+    }
 }
-
-

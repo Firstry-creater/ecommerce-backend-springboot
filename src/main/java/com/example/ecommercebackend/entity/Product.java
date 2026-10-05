@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-
+ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "products")
 @Getter
@@ -33,5 +33,6 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
+    @JsonIgnore
     private Category category;
 }

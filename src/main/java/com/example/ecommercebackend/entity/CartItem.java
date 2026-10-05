@@ -1,8 +1,10 @@
 
 package com.example.ecommercebackend.entity;
 
+
 import jakarta.persistence.*;
 import lombok.*;
+
 
 @Entity
 @Table(name = "cart_items")

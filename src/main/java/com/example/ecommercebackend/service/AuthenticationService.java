@@ -1,7 +1,10 @@
 
 package com.example.ecommercebackend.service;
 
-import com.example.ecommercebackend.dto.request.LoginRequest;
+import com.example.ecommercebackend.dto.request
+
+
+        .LoginRequest;
 import com.example.ecommercebackend.dto.request.RegisterRequest;
 import com.example.ecommercebackend.dto.response.AuthResponse;
 import com.example.ecommercebackend.entity.Role;
@@ -37,6 +40,8 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
+
+
 
         userRepository.save(user);
 

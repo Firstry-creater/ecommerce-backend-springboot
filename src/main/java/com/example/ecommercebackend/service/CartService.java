@@ -5,6 +5,7 @@ import com.example.ecommercebackend.entity.*;
 import com.example.ecommercebackend.repository.CartRepository;
 import com.example.ecommercebackend.repository.ProductRepository;
 import com.example.ecommercebackend.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ public class CartService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
+    @Transactional
     public Cart addToCart(Long userId,
                           Long productId,
                           Integer quantity) {
@@ -46,17 +48,22 @@ public class CartService {
 
         return cartRepository.save(cart);
     }
-
+    // 2. GET CART
+    @Transactional(readOnly = true)
     public Cart getCart(Long userId) {
 
         return cartRepository.findByUserId(userId)
-                .orElseThrow();
+                .orElseThrow(() ->
+                        new RuntimeException("Cart not found for user: " + userId));
     }
 
+    // 3. CLEAR CART
+    @Transactional
     public void clearCart(Long userId) {
 
         Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow();
+                .orElseThrow(() ->
+                        new RuntimeException("Cart not found for user: " + userId));
 
         cart.getItems().clear();
 
