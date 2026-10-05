@@ -1,5 +1,5 @@
 
-name: Java CI
+name: Java CI + Docker
 
 on:
   push:
@@ -28,3 +28,6 @@ jobs:
 
       - name: Build with Maven
         run: ./mvnw clean package -DskipTests
+
+      - name: Build Docker image
+        run: docker build -t ecommerce-backend:latest .
